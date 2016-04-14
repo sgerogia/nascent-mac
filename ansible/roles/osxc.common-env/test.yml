@@ -1,6 +1,0 @@
----
-- hosts: localhost
-  remote_user: root
-  tasks:
-  - include_vars: defaults/main.yml
-  - include: tasks/main.yml
