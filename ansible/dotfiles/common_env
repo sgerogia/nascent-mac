@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Setup jENV
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"

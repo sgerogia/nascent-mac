@@ -1,0 +1,19 @@
+---
+# Everything Homebrew-related goes here
+- hosts: all
+  roles:
+  - role: osxc.homebrew
+  - role: osxc.packages
+    brew_taps:
+    - caskroom/fonts
+    brew_packages:
+    - git
+    - zsh
+    - vim
+    - tmux
+    - jenv
+    cask_packages:
+    - font-inconsolata-for-powerline
+    - iterm2
+    - macvim
+    - java
