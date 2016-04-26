@@ -24,9 +24,16 @@
   - copy: src=dotfiles/vimrc.local dest=/Users/{{ ansible_user_id }}/.vimrc.local backup=yes
   - copy: src=dotfiles/vimrc.bundles.local dest=/Users/{{ ansible_user_id }}/.vimrc.bundles.local backup=yes
   - copy: src=dotfiles/tmux.conf.local dest=/Users/{{ ansible_user_id }}/.tmux.conf.local backup=yes
+  - copy: src=dotfiles/bash_profile.local dest=/Users/{{ ansible_user_id }}/.bash_profile backup=yes
+  - copy: src=dotfiles/bash_sgerogia.local dest=/Users/{{ ansible_user_id }}/.bash_sgerogia backup=yes
+
 
 - hosts: all
   roles:
   - osxc.common-env
-#  post_tasks:
-#  - copy: src=dotfiles/common_env dest=/Users/{{ ansible_user_id }}/.common_env backup=yes
+  post_tasks:
+  - copy: src=dotfiles/common_env dest=/Users/{{ ansible_user_id }}/.common_env backup=yes
+
+- hosts: all
+  post_tasks:
+  - shell: ./scripts/post_setup.sh

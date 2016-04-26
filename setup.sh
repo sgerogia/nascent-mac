@@ -17,4 +17,4 @@ cd "${SETTINGS_PROJECT}/ansible"
 
 ansible-galaxy install -r requirements.yml
 
-ansible-playbook desktop.yml 
+ansible-playbook -v desktop.yml

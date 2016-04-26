@@ -1,0 +1,287 @@
+#Includes
+SCRIPT_LOCATION=`dirname "${BASH_ARGV[0]}"`
+
+#### Web Proxy
+function set_proxy {
+	echo -n "Proxy Password: "
+	read -s password
+	echo
+
+	proxy=http://$USERNAME:$password@proxy:8080
+	export https_proxy=$proxy
+	export http_proxy=$proxy
+}
+
+function unset_proxy {
+	unset http_proxy
+	unset https_proxy
+}
+
+#### Git commands
+alias gsa='find . -name .git -print -execdir git status \;'
+alias gs='git status'
+alias gb='git branch -vv'
+alias grh='git reset --hard'
+alias gmt='git mergetool'
+alias gc='git commit -m '
+
+function gup()
+{
+    echo_and_call "git pull --ff-only origin $1"
+    pullResult=$?
+
+    if [ "$pullResult" -eq 128 ];then
+        echo  -e "\E[36mFast forward not possible, rebasing now...\E[m" >&1
+        __rebase $1
+    elif [ "$pullResult" -eq 0 ];then
+        echo -e "\E[36mSuccessful fast forward, no rebase required\E[m" >&1
+    else
+        echo -e "\E[36mFailure - See reason above\E[m" >&1
+    fi
+}
+
+function gp()
+{
+    if [ "$1" ];then
+       BRANCH=$1
+    else
+       BRANCH=`current_git_branch`
+    fi
+
+    echo_and_call "git push origin $BRANCH"
+}
+
+function grb()
+{
+    print_help_title "Consider using \"gup\" instead of \"grb\", it's often quicker"
+
+    echo_and_call "git fetch"
+    __rebase $1
+}
+
+function __rebase()
+{
+    if [ "$1" ];then
+        BRANCH=$1
+    else
+        BRANCH=`current_git_branch`
+    fi
+
+    echo_and_call "git rebase -p -m origin/$BRANCH"
+}
+
+function createFeatureBranch()
+{
+    trap "echo Feature Branch Creation Failed; return;" ERR INT TERM
+
+    if [[ -d .git ]]; then
+    		read -e -t 120 -p "Feature Branch Name: " branch
+
+    		if [[ -z $branch ]]; then
+    		    echo "A Feature Branch name must be provided"
+    		    exit 1
+    		fi
+
+    		git checkout -b $branch
+
+    		if [[ $? -eq 0 ]]; then
+    			echo "Successfully created Feature Branch; $branch"
+
+    			if [[ -f pom.xml ]]; then
+    				echo "Using Maven Release Plugin to update version for Feature Branch"
+    				updateProjectVersion 0.0.0-$branch-SNAPSHOT
+
+    				if [[ $? -eq 0 ]]; then
+    					git add pom.xml
+    					git commit -m "Creating feature branch $branch"
+    				else
+    					echo "There was a problem updating the pom.xml, check output above"
+    					exit 2
+    				fi
+    			fi
+    		else
+    			echo "Feature Branch Creation Failed"
+    			exit 1
+    		fi
+    	else
+    		echo "Directory is not a Git Repoistory, cannot create a feature branch"
+    		exit 1
+    	fi
+}
+
+function updateProjectVersion()
+{
+	if [ $1 ];then
+		echo "Updating Maven Project to version $1"
+		LOG_FILE="project_update_out.txt"
+		echo "Output to $LOG_FILE"
+		mvn $SGEROGIA_MVN_OPTS --batch-mode release:update-versions -DdevelopmentVersion=$1 > $LOG_FILE
+
+		if [ $? -ne 0 ];then
+			echo "Update unsuccessful. See $LOG_FILE."
+			echo "NOTE: .releaseBackup versions of poms may have been created"
+			exit 2
+		else 
+			echo "Update successful. Removing log file."
+			rm $LOG_FILE
+		fi
+	else
+		echo "Must enter version to update to as first argument"
+		exit 1
+	fi
+}
+
+function findDirty () {
+	echo "Searching for changes.."
+    for gitdir in `find . -name .git`;
+    do
+        worktree=${gitdir%/*};
+		if ! unstagedChanges $gitdir
+        then
+            echo "unstaged     $gitdir"
+        fi
+
+        if ! uncommitedChanges $gitdir
+        then
+            echo "uncommitted  $gitdir"
+        fi
+		
+		if ! unpushedChanges $gitdir
+        then
+            echo "unpushed  $gitdir"
+        fi
+    done
+}
+
+#Maven commands
+alias mup='mvn $SGEROGIA_MVN_OPTS versions:update-parent -DgenerateBackupPoms=false -U'
+alias mups='mvn $SGEROGIA_MVN_OPTS versions:update-parent -DallowSnapshots=true -DgenerateBackupPoms=false'
+alias mur='mvn $SGEROGIA_MVN_OPTS versions:use-latest-releases -DgenerateBackupPoms=false'
+alias muc='mvn $SGEROGIA_MVN_OPTS versions:display-dependency-updates -DprocessDependencyManagement=false -DgenerateBackupPoms=false'
+alias mstr='mvn $SGEROGIA_MVN_OPTS versions:use-releases -DgenerateBackupPoms=false'
+alias mus='mvn $SGEROGIA_MVN_OPTS versions:use-latest-snapshots -DgenerateBackupPoms=false'
+alias mep='mvn $SGEROGIA_MVN_OPTS help:effective-pom'
+alias mdt='mvn $SGEROGIA_MVN_OPTS dependency:tree'
+
+function mci()
+{
+    # If the user specifies "--no-bundles" then do not implicitly activate bundles
+    # We need to remove that argument if the user specified it and pass through all other arguments
+    PROFILES="-Pbundle"
+    OTHER_ARGS=""
+    for argument in "$@"; do
+        if [ $argument == "--no-bundles" ]; then
+            PROFILES=""
+            echo Bundles profile has been deactivated
+        else
+            OTHER_ARGS="$OTHER_ARGS $argument"
+        fi
+    done
+    mvn $SGEROGIA_MVN_OPTS $PROFILES clean install$OTHER_ARGS
+}
+
+function mrc()
+{
+    mvn $SGEROGIA_MVN_OPTS release:prepare -DdryRun=true -B
+    releaseResult=$?
+    echo -e "\E[1;31mCleaning up after release test - please wait\E[m" >&1
+    mvn $SGEROGIA_MVN_OPTS release:clean
+    if [ $releaseResult -eq "0" ]; then
+    	echo -e "\E[1;32mThe release test was a success\E[m" >&1
+    else
+    	echo -e "\E[1;31mThe release test failed! Scroll up to see details\E[m" >&1
+    fi
+}
+
+#Helper functions
+
+function executeCommandOnPomFiles() {
+
+    command=$1;
+    oldDir=`pwd`
+    
+    for i in `find . -maxdepth 3 -name pom.xml`
+    do
+        pomPath=`dirname $i`        
+        cd $pomPath
+        $command
+        cd $oldDir      
+    done    
+}
+
+function current_git_branch()
+{
+        ref=`git symbolic-ref -q HEAD`
+        if [ $? -eq "0" ]; then
+            echo $ref | awk "BEGIN{ FS=\"/\" } { print \$3 }"
+        else
+            echo "Detached HEAD"
+        fi
+}
+
+function unstagedChanges() {
+    worktree=${1%/*};
+    git --git-dir="$1" --work-tree="$worktree" diff-files --quiet --ignore-submodules --
+}
+
+function uncommitedChanges() {
+    worktree=${1%/*};
+    git --git-dir="$1" --work-tree="$worktree" diff-index --cached --quiet HEAD --ignore-submodules --
+}
+
+function unpushedChanges() {
+    worktree=${1%/*};
+    git --git-dir="$1" --work-tree="$worktree" diff --quiet origin/master..HEAD --ignore-submodules --
+}
+
+function echo_and_call()
+{
+   if [ "$1" ]; then
+    echo -e "\E[36m$1\E[m" >&1
+    $1
+   fi
+}
+
+function zambezihelp()
+{
+    print_help_title "Agile Markets Web Proxy Shortcuts"
+    print_help_line set_proxy "Sets the http and https proxies for external internet access"
+    print_help_line unset_proxy "Removes any http and https proxies set in the environment"
+
+	print_help_title "Agile Markets Git Shortcuts"
+	print_help_line gs "Shortcut for git status"
+	print_help_line gsa "Cygwin Only: Recursively run git status on all subdirectories that are git clones"
+	print_help_line "gc commitMessage" "Performs a git commit with the first argument as the commit message"
+	print_help_line gb "Lists all git branches using git branch -vv"
+	print_help_line "gp [branchName]" "Push the current branch (Unless a branch name is supplied) to the remote repository"
+	print_help_line "grb [branchName]" "Runs a fetch and rebase on the current branch (unless a branch name is supplied) with the correct options. Consider using \"gup\" as this will do a fast forward when possible and only rebase is needed"
+	print_help_line grh "Reverts all the non-commited changes to head, similar to the svn revert"
+	print_help_line "gup [branchName]" "Git update. This command will get you up to date by performing a fast forward pull if possible. If you have local commits then a fast forward cannot be performed so it will go on to do a rebase. An optional branch can be provided if you don't want to use the current branch. Note that your branch must be tracking a remote for this command to work"
+	print_help_line gmt "Runs git mergetool which can be used to work through merge/rebase conflicts"
+	print_help_line "createFeatureBranch" "Creates a feature branch. This creates a new git branch with the provided name and updates the version numbers to match the feature branch naming convention"
+	print_help_line "findDirty" "Recursively lists all the directories with unstaged/uncommitted/unpushed changes below the current directory"
+
+	print_help_title "Zambezi Maven Shortcuts"
+	print_help_title "(If you require additional Maven options then please set these with the environment variable \$SGEROGIA_MVN_OPTS )"
+	print_help_line mup "Updates a pom to the latest release parent pom (works for aggregates as well)"
+	print_help_line mups "Updates a pom to the latest snapshot parent pom (works for aggregates as well)"
+	print_help_line mur "Update releases - updates all explicit release dependencies to the latest available release versions (works for aggregates as well)"
+	print_help_line muc "Update check - checks if you have the latest version of all  explicit release dependencies (works for aggregates as well)"
+	print_help_line mstr "Snapshots to releases - updates all explicit snapsnot dependencies to their corresponding release versions (works for aggregates as well)"
+	print_help_line mus "Update snapshots - updates all explicit release dependencies to the latest available snapshot versions (works for aggregates as well)"
+	print_help_line mep "Displays the effective pom by expanding the parent poms"
+	print_help_line mdt "Displays the dependency tree for this pom"
+	print_help_line "mci [--no-bundles]" "Does mvn clean install, erases target folder and runs the install phase. Optional --no-bundles parameter will not build bundles (tar.gz files)"
+	print_help_line mrc "Maven release check - does a dry run of a release to check if it has any snapshot dependencies etc"
+	print_help_line "updateProjectVersion [nerVersion]" "Sets a new version for your multi module project. This will update all child modules to reference the new parent verison. Useful when you create a new branch and need to change the version number"
+}
+
+function print_help_line()
+{
+   echo -e "\E[36m$1\E[m - $2" >&1
+}
+
+function print_help_title()
+{
+   echo -e "\E[1;31m$1\E[m" >&1
+}

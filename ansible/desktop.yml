@@ -1,4 +1,5 @@
 ---
 # Your run is described here
 - include: shell.yml
-# - include: homebrew.yml
+- include: homebrew.yml
+- include: macbook.yml

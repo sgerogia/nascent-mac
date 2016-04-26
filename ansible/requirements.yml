@@ -4,3 +4,7 @@
 - src: osxc.homebrew
 - src: osxc.packages
 - src: osxc.repository
+- src: jeremyltn.osx-computername
+- src: lafarer.osx-jenv
+- src: jeremyltn.osx-sudoers
+- src: lafarer.osx-defaults
