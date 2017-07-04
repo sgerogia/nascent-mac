@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #Includes
 SCRIPT_LOCATION=`dirname "${BASH_ARGV[0]}"`
 

@@ -1,10 +1,17 @@
 ---
 # Ansible Galaxy Requirements
-- src: osxc.common-env
-- src: osxc.homebrew
-- src: osxc.packages
-- src: osxc.repository
+- src: Meuk.osxc-common-env
+  version: 1.2
+- src: Meuk.osxc-homebrew
+  version: 1.2
+- src: Meuk.osxc-packages
+  version: 1.2
 - src: jeremyltn.osx-computername
+- src: lafarer.osx-defaults
 - src: lafarer.osx-jenv
 - src: jeremyltn.osx-sudoers
-- src: lafarer.osx-defaults
+
+#- src: osxc.repository
+#
+
+#

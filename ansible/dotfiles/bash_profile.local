@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # base-files version 3.9-3
 
 # To pick up the latest recommended .bash_profile content,

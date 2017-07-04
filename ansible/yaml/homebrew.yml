@@ -1,0 +1,48 @@
+---
+# Everything Homebrew-related goes here
+- hosts: all
+
+  vars:
+    jdks:
+    - java
+    - java7
+
+  roles:
+
+  # Install Homebrew
+  # See: https://galaxy.ansible.com/Meuk/osxc-homebrew/#readme
+  - role: Meuk.osxc-homebrew
+    installation_method: "script"
+    install_dir: "/usr/local"
+    install_cask: true
+
+  # Homebrew packages
+  # See: https://galaxy.ansible.com/Meuk/osxc-packages/
+  - role: Meuk.osxc-homebrew
+    brew_taps:
+    - caskroom/fonts
+    - caskroom/versions
+    brew_packages:
+    - git
+    - zsh
+    - vim
+    - tmux
+    - jenv
+    - maven
+    cask_packages:
+    - font-inconsolata-for-powerline
+    - iterm2
+    - macvim
+    - intellij-idea
+    - vlc
+    - sublime-text3
+    - google-chrome
+    - keka
+    - openoffice
+    - utorrent
+    - virtualbox
+    - vagrant
+
+  # Install Java Env Mgr
+  # See: https://galaxy.ansible.com/lafarer/osx-jenv/
+  - role: lafarer.osx-jenv
