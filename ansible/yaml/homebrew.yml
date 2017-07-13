@@ -14,21 +14,24 @@
   - role: Meuk.osxc-homebrew
     installation_method: "script"
     install_dir: "/usr/local"
-    install_cask: true
+    install_cask: yes
+    affected_users: [ "{{ current_user }}" ]
 
   # Homebrew packages
   # See: https://galaxy.ansible.com/Meuk/osxc-packages/
-  - role: Meuk.osxc-homebrew
+  - role: Meuk.osxc-packages
     brew_taps:
     - caskroom/fonts
     - caskroom/versions
     brew_packages:
+    - bash
     - git
     - zsh
     - vim
     - tmux
     - jenv
     - maven
+    - node
     cask_packages:
     - font-inconsolata-for-powerline
     - iterm2
@@ -45,4 +48,4 @@
 
   # Install Java Env Mgr
   # See: https://galaxy.ansible.com/lafarer/osx-jenv/
-  - role: lafarer.osx-jenv
+  #- role: lafarer.osx-jenv

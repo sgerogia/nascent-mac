@@ -4,9 +4,6 @@
 - hosts: all
   any_errors_fatal: false
 
-  vars:
-    current_user: "sgerogia"
-
   pre_tasks:
   # Show wifi, battery, clock on the menu
   - command: >
@@ -111,11 +108,6 @@
     MissionControl_SwitchOnActivate: true            # When switching to an application, switch to a Space with open windows for the application
     MissionControl_GroupByApp: true                  # Group windows by application in Mission Control
     MissionControl_SpansDisplays: true               # Displays have separate Spaces
-
-  # Common env file
-  # See: https://galaxy.ansible.com/Meuk/osxc-common-env/#readme
-  - role: Meuk.osxc-common-env
-    affected_users: [ "{{ current_user}}" ]
 
   # Add current user as passwordless sudoer
   # See: https://galaxy.ansible.com/jeremyltn/osx-sudoers/

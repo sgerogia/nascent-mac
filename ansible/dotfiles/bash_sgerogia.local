@@ -2,22 +2,6 @@
 #Includes
 SCRIPT_LOCATION=`dirname "${BASH_ARGV[0]}"`
 
-#### Web Proxy
-function set_proxy {
-	echo -n "Proxy Password: "
-	read -s password
-	echo
-
-	proxy=http://$USERNAME:$password@proxy:8080
-	export https_proxy=$proxy
-	export http_proxy=$proxy
-}
-
-function unset_proxy {
-	unset http_proxy
-	unset https_proxy
-}
-
 #### Git commands
 alias gsa='find . -name .git -print -execdir git status \;'
 alias gs='git status'

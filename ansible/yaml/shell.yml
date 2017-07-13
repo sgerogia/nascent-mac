@@ -2,38 +2,37 @@
 # Everything shell-, environment- and VI-related goes here
 
 - hosts: all
+
   roles:
-  - role: osxc.repository
-    clone_url: https://github.com/robbyrussell/oh-my-zsh.git
-    dest: /Users/{{ ansible_user_id }}/.oh-my-zsh
-  - role: osxc.repository
+
+  # Common env file
+  # See: https://galaxy.ansible.com/Meuk/osxc-common-env/#readme
+  - role: Meuk.osxc-common-env
+    affected_users: [ "{{ current_user}}" ]
+    post_tasks:
+      - copy: src=../dotfiles/common_env dest=/Users/{{ current_user }}/.common_env backup=yes
+
+  - role: Meuk.osxc-repository
+    affected_users: [ "{{ current_user}}" ]
     clone_url: https://github.com/square/maximum-awesome.git
-    dest: /Users/{{ ansible_user_id }}/.vim
+    dest: /Users/{{ current_user }}/.vim
     links:
     - src: vimrc
-      dest: /Users/{{ ansible_user_id }}/.vimrc
+      dest: /Users/{{ current_user }}/.vimrc
     - src: vimrc.bundles
-      dest: /Users/{{ ansible_user_id }}/.vimrc.bundles
+      dest: /Users/{{ current_user }}/.vimrc.bundles
     - src: tmux.conf
-      dest: /Users/{{ ansible_user_id }}/.tmux.conf
-  - role: osxc.repository
-    clone_url: https://github.com/gmarik/vundle.git
-    dest: /Users/{{ ansible_user_id }}/.vim/bundle/vundle
-  post_tasks:
-  - copy: src=dotfiles/zshrc dest=/Users/{{ ansible_user_id }}/.zshrc backup=yes
-  - copy: src=dotfiles/vimrc.local dest=/Users/{{ ansible_user_id }}/.vimrc.local backup=yes
-  - copy: src=dotfiles/vimrc.bundles.local dest=/Users/{{ ansible_user_id }}/.vimrc.bundles.local backup=yes
-  - copy: src=dotfiles/tmux.conf.local dest=/Users/{{ ansible_user_id }}/.tmux.conf.local backup=yes
-  - copy: src=dotfiles/bash_profile.local dest=/Users/{{ ansible_user_id }}/.bash_profile backup=yes
-  - copy: src=dotfiles/bash_sgerogia.local dest=/Users/{{ ansible_user_id }}/.bash_sgerogia backup=yes
+      dest: /Users/{{ current_user }}/.tmux.conf
 
+  - role: Meuk.osxc-repository
+    affected_users: [ "{{ current_user}}" ]
+    clone_url: https://github.com/VundleVim/Vundle.vim.git
+    dest: /Users/{{ current_user }}/.vim/bundle/Vundle.vim
 
-- hosts: all
-  roles:
-  - osxc.common-env
   post_tasks:
-  - copy: src=dotfiles/common_env dest=/Users/{{ ansible_user_id }}/.common_env backup=yes
-
-- hosts: all
-  post_tasks:
-  - shell: ./scripts/post_setup.sh
+  - copy: src=../dotfiles/vimrc.local dest=/Users/{{ current_user }}/.vimrc.local backup=yes
+  - copy: src=../dotfiles/vimrc.bundles.local dest=/Users/{{ current_user }}/.vimrc.bundles.local backup=yes
+  - copy: src=../dotfiles/tmux.conf.local dest=/Users/{{ current_user }}/.tmux.conf.local backup=yes
+  - copy: src=../dotfiles/bash_profile.local dest=/Users/{{ current_user }}/.bash_profile backup=yes
+  - copy: src=../dotfiles/bash_sgerogia.local dest=/Users/{{ current_user }}/.bash_sgerogia backup=yes
+  - shell: ../scripts/post_setup.sh

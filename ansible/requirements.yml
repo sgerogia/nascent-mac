@@ -1,17 +1,25 @@
 ---
 # Ansible Galaxy Requirements
-- src: Meuk.osxc-common-env
-  version: 1.2
+
+# Patched version of https://galaxy.ansible.com/Meuk/osxc-common-env/
+- src: https://github.com/sgerogia/osxc-common-env
+  version: master
+  name: Meuk.osxc-common-env
+
 - src: Meuk.osxc-homebrew
   version: 1.2
-- src: Meuk.osxc-packages
-  version: 1.2
+
+# Patched version of https://galaxy.ansible.com/Meuk/osxc-packages/
+- src: https://github.com/sgerogia/osxc-packages
+  version: master
+  name: Meuk.osxc-packages
+
+# Patched version of https://galaxy.ansible.com/Meuk/osxc-repository/
+- src: https://github.com/sgerogia/osxc-repository
+  version: master
+  name: Meuk.osxc-repository
+
 - src: jeremyltn.osx-computername
 - src: lafarer.osx-defaults
 - src: lafarer.osx-jenv
 - src: jeremyltn.osx-sudoers
-
-#- src: osxc.repository
-#
-
-#

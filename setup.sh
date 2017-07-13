@@ -21,6 +21,8 @@ git clone "https://github.com/sgerogia/${SETTINGS_PROJECT}.git" || true
 cd "${SRC_DIR}/${SETTINGS_PROJECT}/ansible"
 
 echo "----> Updating Mac. Hold on tight!..."
-ansible-galaxy install -r requirements.yml
+sudo ansible-galaxy install -r requirements.yml
 
-ansible-playbook -v setup.yml
+sudo ansible-playbook -v ./yaml/osx.yml
+ansible-playbook -v ./yaml/homebrew.yml
+sudo ansible-playbook -v ./yaml/shell.yml
