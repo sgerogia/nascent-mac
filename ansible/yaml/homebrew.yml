@@ -32,6 +32,7 @@
     - jenv
     - maven
     - node
+    - gradle
     cask_packages:
     - font-inconsolata-for-powerline
     - iterm2
