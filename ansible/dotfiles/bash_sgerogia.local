@@ -2,6 +2,49 @@
 #Includes
 SCRIPT_LOCATION=`dirname "${BASH_ARGV[0]}"`
 
+#### Colors
+if test -t 1; then
+
+    # see if it supports colors...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test $ncolors -ge 8; then
+        bold="$(tput bold)"
+        underline="$(tput smul)"
+        standout="$(tput smso)"
+        nc="$(tput sgr0)"
+        black="$(tput setaf 0)"
+        red="$(tput setaf 1)"
+        green="$(tput setaf 2)"
+        yellow="$(tput setaf 3)"
+        blue="$(tput setaf 4)"
+        magenta="$(tput setaf 5)"
+        cyan="$(tput setaf 6)"
+        white="$(tput setaf 7)"
+    fi
+fi
+
+#### Command-line shortcuts
+
+# Used for GIT command line tab completion
+if [ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash ]; then
+    . /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
+fi
+
+if [ -f /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh ]; then
+    source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
+fi
+
+alias cdsg='cd ~/src/github.com/sgerogia'
+alias ..='cd ..'
+alias ls='ls -G -F -A -h'
+alias ll='ls -lrt'
+alias more=less
+alias h='history'
+alias hg='history | grep $1'
+alias psg='ps -eaf | grep $1'
+alias vf='cd'
+
 #### Git commands
 alias gsa='find . -name .git -print -execdir git status \;'
 alias gs='git status'
@@ -16,12 +59,12 @@ function gup()
     pullResult=$?
 
     if [ "$pullResult" -eq 128 ];then
-        echo  -e "\E[36mFast forward not possible, rebasing now...\E[m" >&1
+        echo  -e "${cyan}Fast forward not possible, rebasing now...${nc}" >&1
         __rebase $1
     elif [ "$pullResult" -eq 0 ];then
-        echo -e "\E[36mSuccessful fast forward, no rebase required\E[m" >&1
+        echo -e "${cyan}Successful fast forward, no rebase required${nc}" >&1
     else
-        echo -e "\E[36mFailure - See reason above\E[m" >&1
+        echo -e "${cyan}Failure - See reason above${nc}" >&1
     fi
 }
 
@@ -55,7 +98,7 @@ function __rebase()
     echo_and_call "git rebase -p -m origin/$BRANCH"
 }
 
-function createFeatureBranch()
+function createfb()
 {
     trap "echo Feature Branch Creation Failed; return;" ERR INT TERM
 
@@ -72,24 +115,12 @@ function createFeatureBranch()
     		if [[ $? -eq 0 ]]; then
     			echo "Successfully created Feature Branch; $branch"
 
-    			if [[ -f pom.xml ]]; then
-    				echo "Using Maven Release Plugin to update version for Feature Branch"
-    				updateProjectVersion 0.0.0-$branch-SNAPSHOT
-
-    				if [[ $? -eq 0 ]]; then
-    					git add pom.xml
-    					git commit -m "Creating feature branch $branch"
-    				else
-    					echo "There was a problem updating the pom.xml, check output above"
-    					exit 2
-    				fi
-    			fi
     		else
     			echo "Feature Branch Creation Failed"
     			exit 1
     		fi
     	else
-    		echo "Directory is not a Git Repoistory, cannot create a feature branch"
+    		echo "Directory is not a Git Repository, cannot create a feature branch"
     		exit 1
     	fi
 }
@@ -169,12 +200,12 @@ function mrc()
 {
     mvn $SGEROGIA_MVN_OPTS release:prepare -DdryRun=true -B
     releaseResult=$?
-    echo -e "\E[1;31mCleaning up after release test - please wait\E[m" >&1
+    echo -e "${blue}Cleaning up after release test - please wait${nc}" >&1
     mvn $SGEROGIA_MVN_OPTS release:clean
     if [ $releaseResult -eq "0" ]; then
-    	echo -e "\E[1;32mThe release test was a success\E[m" >&1
+    	echo -e "${green}The release test was a success${nc}" >&1
     else
-    	echo -e "\E[1;31mThe release test failed! Scroll up to see details\E[m" >&1
+    	echo -e "${red}The release test failed! Scroll up to see details${nc}" >&1
     fi
 }
 
@@ -222,20 +253,16 @@ function unpushedChanges() {
 function echo_and_call()
 {
    if [ "$1" ]; then
-    echo -e "\E[36m$1\E[m" >&1
+    echo -e "${cyan}$1${nc}" >&1
     $1
    fi
 }
 
-function zambezihelp()
+function sghelp()
 {
-    print_help_title "Agile Markets Web Proxy Shortcuts"
-    print_help_line set_proxy "Sets the http and https proxies for external internet access"
-    print_help_line unset_proxy "Removes any http and https proxies set in the environment"
-
-	print_help_title "Agile Markets Git Shortcuts"
+	print_help_title "Git Shortcuts"
 	print_help_line gs "Shortcut for git status"
-	print_help_line gsa "Cygwin Only: Recursively run git status on all subdirectories that are git clones"
+	print_help_line gsa "Recursively run git status on all subdirectories that are git clones"
 	print_help_line "gc commitMessage" "Performs a git commit with the first argument as the commit message"
 	print_help_line gb "Lists all git branches using git branch -vv"
 	print_help_line "gp [branchName]" "Push the current branch (Unless a branch name is supplied) to the remote repository"
@@ -246,7 +273,7 @@ function zambezihelp()
 	print_help_line "createFeatureBranch" "Creates a feature branch. This creates a new git branch with the provided name and updates the version numbers to match the feature branch naming convention"
 	print_help_line "findDirty" "Recursively lists all the directories with unstaged/uncommitted/unpushed changes below the current directory"
 
-	print_help_title "Zambezi Maven Shortcuts"
+	print_help_title "Maven Shortcuts"
 	print_help_title "(If you require additional Maven options then please set these with the environment variable \$SGEROGIA_MVN_OPTS )"
 	print_help_line mup "Updates a pom to the latest release parent pom (works for aggregates as well)"
 	print_help_line mups "Updates a pom to the latest snapshot parent pom (works for aggregates as well)"
@@ -258,15 +285,15 @@ function zambezihelp()
 	print_help_line mdt "Displays the dependency tree for this pom"
 	print_help_line "mci [--no-bundles]" "Does mvn clean install, erases target folder and runs the install phase. Optional --no-bundles parameter will not build bundles (tar.gz files)"
 	print_help_line mrc "Maven release check - does a dry run of a release to check if it has any snapshot dependencies etc"
-	print_help_line "updateProjectVersion [nerVersion]" "Sets a new version for your multi module project. This will update all child modules to reference the new parent verison. Useful when you create a new branch and need to change the version number"
+	print_help_line "updateProjectVersion [newVersion]" "Sets a new version for your multi module project. This will update all child modules to reference the new parent verison. Useful when you create a new branch and need to change the version number"
 }
 
 function print_help_line()
 {
-   echo -e "\E[36m$1\E[m - $2" >&1
+   echo -e "${cyan}$1${nc} - $2" >&1
 }
 
 function print_help_title()
 {
-   echo -e "\E[1;31m$1\E[m" >&1
+   echo -e "${bold}${green}$1${nc}" >&1
 }
