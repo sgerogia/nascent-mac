@@ -8,6 +8,11 @@ xcode-select --install || true
 
 sudo xcodebuild -license accept
 
+echo "----> Installing Brew and Python..."
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew install python
+
 echo "----> Installing Ansible..."
 sudo easy_install pip
 sudo pip install ansible
