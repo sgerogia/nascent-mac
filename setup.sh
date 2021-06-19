@@ -11,10 +11,13 @@ sudo xcodebuild -license accept
 echo "----> Installing Brew and Python..."
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-brew install python
+brew install pyenv
+pyenv install 3.9.5
+pyenv global 3.9.5
+
+echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
 
 echo "----> Installing Ansible..."
-sudo easy_install pip
 sudo pip install ansible
 
 echo "----> Cloning project to ${SRC_DIR}..."
