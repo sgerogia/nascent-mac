@@ -14,8 +14,6 @@
           "/System/Library/CoreServices/Menu Extras/Clock.menu"
 
   roles:
-  - role: jeremyltn.osx-computername
-    computername: unicorn
 
   # Mac OS defaults configuration
   # See: https://github.com/lafarer/ansible-role-osx-defaults

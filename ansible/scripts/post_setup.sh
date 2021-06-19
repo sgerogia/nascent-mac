@@ -5,6 +5,10 @@ bash -c 'echo /usr/local/bin/bash >> /etc/shells'
 # Change to the new shell
 chsh -s /usr/local/bin/bash
 
+# Change computer name on the command line and Bonjour services
+scutil --set ComputerName "unicorn"
+scutil --set LocalHostName "unicorn"
+
 # Show only active apps in Dock
 defaults write com.apple.dock static-only -bool TRUE
 

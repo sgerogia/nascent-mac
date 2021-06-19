@@ -19,7 +19,6 @@
   version: master
   name: Meuk.osxc-repository
 
-- src: jeremyltn.osx-computername
 - src: lafarer.osx-defaults
 - src: lafarer.osx-jenv
 - src: jeremyltn.osx-sudoers
