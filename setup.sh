@@ -18,7 +18,7 @@ pyenv global 3.9.5
 echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
 
 echo "----> Installing Ansible..."
-sudo pip install ansible
+sudo pip3 install ansible
 
 echo "----> Cloning project to ${SRC_DIR}..."
 mkdir -p ${SRC_DIR}
