@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# base-files version 3.9-3
+
+# source the system wide bashrc if it exists
+if [ -e /etc/bash.bashrc ] ; then
+  source /etc/bash.bashrc
+fi
+
+# source the users bashrc if it exists
+if [ -e "${HOME}/.bashrc" ] ; then
+  source "${HOME}/.bashrc"
+fi
+
+# picks up the user shell commands
+if [ -f "${HOME}/.bash_sgerogia" ]; then
+    source "${HOME}/.bash_sgerogia"
+fi
+

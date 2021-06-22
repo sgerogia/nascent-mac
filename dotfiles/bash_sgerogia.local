@@ -37,13 +37,14 @@ fi
 
 alias cdsg='cd ~/src/github.com/sgerogia'
 alias ..='cd ..'
-alias ls='ls -G -F -A -h'
+alias ls='exa -l'
 alias ll='ls -lrt'
 alias more=less
 alias h='history'
 alias hg='history | grep $1'
 alias psg='ps -eaf | grep $1'
 alias vf='cd'
+alias cat='bat'
 
 #### Git commands
 alias gsa='find . -name .git -print -execdir git status \;'
