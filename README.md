@@ -11,7 +11,7 @@ Mac gone? No problem!
 ```bash
 cd ~
 curl -L -o 'nascent-mac.zip' https://github.com/sgerogia/nascent-mac/archive/refs/heads/master.zip
-unzip 'nascent-mac.zip' && cd ./nascent-mac
+unzip 'nascent-mac.zip' && cd ./nascent-mac-master
 chmod +x ./setup.sh
 ./setup.sh
 ```

@@ -6,5 +6,5 @@ sudo bash -c 'echo /usr/local/bin/bash >> /etc/shells'
 chsh -s /usr/local/bin/bash
 
 # Change computer name on the command line and Bonjour services
-scutil --set ComputerName "unicorn_v2"
-scutil --set LocalHostName "unicorn_v2"
+scutil --set ComputerName "unicorn-v2"
+scutil --set LocalHostName "unicorn-v2"

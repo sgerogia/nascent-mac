@@ -91,7 +91,7 @@ casks=(
   sidekick
   skype
   sloth
-  sublime-text3
+  sublime-text
   virtualbox
   vlc
 )
