@@ -65,6 +65,7 @@ important_casks=(
 )
 
 casks=(
+  1password
   aerial
   adobe-acrobat-pro
   cakebrew
@@ -93,7 +94,6 @@ casks=(
   sublime-text3
   virtualbox
   vlc
-  utorrent
 )
 
 pips=(
@@ -186,11 +186,11 @@ if [[ -z "${CI}" ]]; then
 fi
 
 if test ! "$(command -v brew)"; then
-  prompt "----> Install Homebrew"
+  echo "----> Install Homebrew"
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 else
   if [[ -z "${CI}" ]]; then
-    prompt "----> Update Homebrew"
+    echo "----> Update Homebrew"
     brew update
     brew upgrade
     brew doctor
@@ -200,26 +200,26 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 echo "----> Install software ..."
 brew tap homebrew/cask-versions
-install 'brew cask install' "${important_casks[@]}"
+install 'brew install --cask ' "${important_casks[@]}"
 
-prompt "----> Install packages"
-install 'brew_install_or_upgrade' "${brews[@]}"
+echo "----> Install packages ..."
+install 'brew_install_or_upgrade ' "${brews[@]}"
 brew link --overwrite ruby
 
-prompt "Set git defaults"
+echo "----> Set git defaults ..."
 for config in "${git_configs[@]}"
 do
   git config --global ${config}
 done
 
-if [[ -z "${CI}" ]]; then
-  prompt "Export key to Github"
+if [[ ! -f "/Users/sgerogia/.ssh/id_rsa.pub" ]]; then
+  echo "----> Export key to Github ..."
   ssh-keygen -t rsa -b 4096 -C ${git_email}
   pbcopy < ~/.ssh/id_rsa.pub
   open https://github.com/settings/ssh/new
 fi
 
-prompt "Upgrade bash"
+echo "----> Upgrade bash ..."
 brew install bash bash-completion2 fzf
 sudo bash -c "echo $(brew --prefix)/bin/bash >> /private/etc/shells"
 sudo chsh -s "$(brew --prefix)"/bin/bash
@@ -227,20 +227,20 @@ sudo chsh -s "$(brew --prefix)"/bin/bash
 touch ~/.bash_profile #see https://github.com/twolfson/sexy-bash-prompt/issues/51
 (cd /tmp && git clone --depth 1 --config core.autocrlf=false https://github.com/twolfson/sexy-bash-prompt && cd sexy-bash-prompt && make install) && source ~/.bashrc
 
-prompt "Install software"
-install 'brew cask install' "${casks[@]}"
+echo "----> Install software ..."
+install 'brew install --cask ' "${casks[@]}"
 
-prompt "Install secondary packages"
-install 'pip3 install --upgrade' "${pips[@]}"
-install 'gem install' "${gems[@]}"
-install 'npm install --global' "${npms[@]}"
-install 'code --install-extension' "${vscode[@]}"
+echo "----> Install secondary packages ..."
+install 'pip3 install --upgrade ' "${pips[@]}"
+install 'sudo gem install ' "${gems[@]}"
+install 'npm install --global ' "${npms[@]}"
+install 'code --install-extension ' "${vscode[@]}"
 
-prompt "Update packages"
+echo "----> Update packages ..."
 pip3 install --upgrade pip setuptools wheel
 if [[ -z "${CI}" ]]; then
   m update install all
 fi
 
-prompt "----> Cleanup"
+echo "----> Cleanup ..."
 brew cleanup

@@ -12,10 +12,16 @@ chmod +x ./scripts/*.sh
 
 echo "----> Updating Mac. Hold on tight!..."
 
-./scripts/shell.sh
+cd ./scripts
 
-./scripts/homebrew.sh
+echo "----> Executing shell.sh"
+./shell.sh
 
-./scripts/osx.sh
+echo "----> Executing homebrew.sh"
+./homebrew.sh
 
-./scripts/post_setup.sh
+echo "----> Executing osx.sh"
+./osx.sh
+
+echo "----> Executing post_setup.sh"
+./post_setup.sh
