@@ -10,7 +10,8 @@ Mac gone? No problem!
 
 ```bash
 cd ~
-curl -L -o setup.sh https://github.com/sgerogia/nascent-mac/raw/master/setup.sh
+curl -L -o 'nascent-mac.zip' https://github.com/sgerogia/nascent-mac/archive/refs/heads/master.zip
+unzip 'nascent-mac.zip' && cd ./nascent-mac
 chmod +x ./setup.sh
 ./setup.sh
 ```
