@@ -51,6 +51,7 @@ brews=(
   tmux
   tree
   trash
+  truffle
   "vim --with-override-system-vi"
   "wget --with-iri"
 )
@@ -72,6 +73,7 @@ casks=(
   cleanmymac
   docker
   expressvpn
+  ganache
   geekbench
   google-cloud-sdk
   github
@@ -82,6 +84,7 @@ casks=(
   launchrocket
   macvim
   monitorcontrol
+  notion
   qlcolorcode
   qlmarkdown
   qlstephen

@@ -36,7 +36,7 @@ defaults write com.apple.dashboard DevMode -bool false                         #
 ### Date settings ###
 echo "----> Date settings ..."
 defaults write com.apple.timezone.auto Active -bool false                       # Set time zome automatically using current location
-defaults write com.apple.menuextra.clock DateFormat -string "H:mm"              # Menu bar clock format (e.g. "EEE d MMM HH:mm", "h:mm": Default, "HH": Use a 24-hour clock, "a": Show AM/PM, "ss": Display the time with seconds
+defaults write com.apple.menuextra.clock DateFormat -string "EEE d MMM HH:mm"              # Menu bar clock format (e.g. "EEE d MMM HH:mm", "h:mm": Default, "HH": Use a 24-hour clock, "a": Show AM/PM, "ss": Display the time with seconds
 defaults write com.apple.menuextra.clock FlashDateSeparators -bool false        # Flash the time separators
 defaults write com.apple.menuextra.clock IsAnalog -bool false                   # Analog menu bar clock
 sudo sntp -sS time.apple.com                                                  # Set time server
@@ -101,8 +101,8 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false   # 
 ### Keyboard settings ###
 echo "----> Keyboard ..."
 defaults write NSGlobalDomain com.apple.Keyboard_fnState -bool true             # Use F1, F2, etc. keys as standard function keys
-defaults write NSGlobalDomain KeyRepeat -int 0                                  # Set key repeat rate (Off: 300000, Slow: 120, Fast: 2)
-defaults write NSGlobalDomain InitialKeyRepeat -int 10                      # Set delay until repeat, in milliseconds (Long: 120, Short: 15)
+defaults write NSGlobalDomain KeyRepeat -int 10                                  # Set key repeat rate (Off: 300000, Slow: 120, Fast: 2)
+defaults write NSGlobalDomain InitialKeyRepeat -int 90                      # Set delay until repeat, in milliseconds (Long: 120, Short: 15)
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool true                # Disable press-and-hold for keys in favor of key repeat
 defaults write com.apple.BezelServices kDim -bool true                               # Adjust keyboard brightness in low light
 defaults write com.apple.BezelServices kDimTime -int 60                               # Dim keyboard after idle time (in seconds, 0 is Never)
