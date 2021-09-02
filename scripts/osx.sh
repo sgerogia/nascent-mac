@@ -7,7 +7,8 @@ defaults write com.apple.systemuiserver menuExtras -array \
   "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" \
   "/System/Library/CoreServices/Menu Extras/AirPort.menu" \
   "/System/Library/CoreServices/Menu Extras/Battery.menu" \
-  "/System/Library/CoreServices/Menu Extras/Clock.menu"
+  "/System/Library/CoreServices/Menu Extras/Clock.menu" \
+  "/System/Library/CoreServices/Menu Extras/Volume.menu"
 
 ### AppStore ###
 echo "----> AppStore ..."
@@ -101,8 +102,8 @@ defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false   # 
 ### Keyboard settings ###
 echo "----> Keyboard ..."
 defaults write NSGlobalDomain com.apple.Keyboard_fnState -bool true             # Use F1, F2, etc. keys as standard function keys
-defaults write NSGlobalDomain KeyRepeat -int 10                                  # Set key repeat rate (Off: 300000, Slow: 120, Fast: 2)
-defaults write NSGlobalDomain InitialKeyRepeat -int 90                      # Set delay until repeat, in milliseconds (Long: 120, Short: 15)
+defaults write NSGlobalDomain KeyRepeat -int 12                                  # Set key repeat rate (Off: 300000, Slow: 120, Fast: 2, Values: 120, 90, 60, 30, 12, 6, 2)
+defaults write NSGlobalDomain InitialKeyRepeat -int 68                      # Set delay until repeat, in milliseconds (Long: 120, Short: 15, Values: 120, 94, 68, 35, 25, 15)
 defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool true                # Disable press-and-hold for keys in favor of key repeat
 defaults write com.apple.BezelServices kDim -bool true                               # Adjust keyboard brightness in low light
 defaults write com.apple.BezelServices kDimTime -int 60                               # Dim keyboard after idle time (in seconds, 0 is Never)

@@ -23,6 +23,7 @@ brews=(
   go
   gpg
   gradle
+  heroku
   htop
   httpie
   iftop
@@ -39,13 +40,16 @@ brews=(
   neofetch
   nmap
   node
+  pdfgrep
   poppler
   postgresql
   pgcli
   pv
   python
   python3
+  rbenv
   ruby
+  ruby-build
   shellcheck
   stormssh
   tmux
@@ -77,6 +81,7 @@ casks=(
   geekbench
   google-cloud-sdk
   github
+  goland
   intellij-idea-ce
   iterm2
   kap
@@ -92,11 +97,13 @@ casks=(
   quicklook-csv
   satellite-eyes
   sidekick
+  signal
   skype
   sloth
   sublime-text
   virtualbox
   vlc
+  whatsapp
 )
 
 pips=(
@@ -206,6 +213,7 @@ brew tap homebrew/cask-versions
 install 'brew install --cask ' "${important_casks[@]}"
 
 echo "----> Install packages ..."
+brew tap heroku/brew
 install 'brew_install_or_upgrade ' "${brews[@]}"
 brew link --overwrite ruby
 
