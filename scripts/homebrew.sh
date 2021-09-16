@@ -23,12 +23,15 @@ brews=(
   go
   gpg
   gradle
+  helm
   heroku
   htop
   httpie
   iftop
   "imagemagick --with-webp"
   jenv
+  kind
+  kubectl
   lnav
   m-cli
   mackup
