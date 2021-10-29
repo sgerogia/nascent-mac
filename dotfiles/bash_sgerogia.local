@@ -45,6 +45,7 @@ alias hg='history | grep $1'
 alias psg='ps -eaf | grep $1'
 alias vf='cd'
 alias cat='bat'
+alias k='kubectl'
 
 #### Git commands
 alias gsa='find . -name .git -print -execdir git status \;'
@@ -53,6 +54,8 @@ alias gb='git branch -vv'
 alias grh='git reset --hard'
 alias gmt='git mergetool'
 alias gc='git commit -m '
+alias gcm='git checkout master'
+alias gcb='git checkout -b '
 
 function gup()
 {

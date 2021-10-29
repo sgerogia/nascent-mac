@@ -16,6 +16,7 @@ brews=(
   gh
   git
   git-extras
+  git-filter-repo
   git-fresh
   git-lfs
   "gnuplot --with-qt"
@@ -30,6 +31,7 @@ brews=(
   iftop
   "imagemagick --with-webp"
   jenv
+  jq
   kind
   kubectl
   lnav
