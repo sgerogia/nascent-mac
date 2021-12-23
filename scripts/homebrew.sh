@@ -45,9 +45,11 @@ brews=(
   neofetch
   nmap
   node
+  nvm
   pdfgrep
   poppler
   postgresql
+  protobuf
   pgcli
   pv
   python
@@ -61,6 +63,7 @@ brews=(
   tree
   trash
   truffle
+  yarn
   "vim --with-override-system-vi"
   "wget --with-iri"
 )
@@ -80,6 +83,7 @@ casks=(
   adobe-acrobat-pro
   cakebrew
   cleanmymac
+  clocker
   docker
   expressvpn
   ganache

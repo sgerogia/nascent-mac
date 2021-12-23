@@ -2,6 +2,14 @@
 #Includes
 SCRIPT_LOCATION=`dirname "${BASH_ARGV[0]}"`
 
+# GCloud
+source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
 #### Colors
 if test -t 1; then
 
@@ -45,7 +53,13 @@ alias hg='history | grep $1'
 alias psg='ps -eaf | grep $1'
 alias vf='cd'
 alias cat='bat'
+# K8s
 alias k='kubectl'
+function k_ns()
+{
+  space=$1
+  k config set-context --current --namespace=$1
+}
 
 #### Git commands
 alias gsa='find . -name .git -print -execdir git status \;'
