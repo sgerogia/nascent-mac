@@ -7,6 +7,7 @@ brews=(
   bash
   "bash-snippets --without-all-tools --with-cheat --with-cryptocurrency --with-currency --with-geo --with-qrify --with-siteciphers --with-stocks --with-weather"
   bat
+  cockroachdb/tap/cockroach
   coreutils
   dfc
   exa
@@ -24,6 +25,7 @@ brews=(
   go
   gpg
   gradle
+  grpcurl
   helm
   heroku
   htop
@@ -84,6 +86,7 @@ casks=(
   cakebrew
   cleanmymac
   clocker
+  discord
   docker
   expressvpn
   ganache
@@ -109,6 +112,7 @@ casks=(
   signal
   skype
   sloth
+  stats
   sublime-text
   virtualbox
   vlc

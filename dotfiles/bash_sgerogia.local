@@ -53,6 +53,7 @@ alias hg='history | grep $1'
 alias psg='ps -eaf | grep $1'
 alias vf='cd'
 alias cat='bat'
+alias gurl='grpcurl'
 # K8s
 alias k='kubectl'
 function k_ns()
