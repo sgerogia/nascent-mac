@@ -7,7 +7,10 @@ brews=(
   bash
   "bash-snippets --without-all-tools --with-cheat --with-cryptocurrency --with-currency --with-geo --with-qrify --with-siteciphers --with-stocks --with-weather"
   bat
+  buildkit
+  bzip2
   cockroachdb/tap/cockroach
+  composer
   coreutils
   dfc
   exa
@@ -25,6 +28,7 @@ brews=(
   go
   gpg
   gradle
+  grep
   grpcurl
   helm
   heroku
@@ -49,6 +53,7 @@ brews=(
   node
   nvm
   pdfgrep
+  php
   poppler
   postgresql
   protobuf
