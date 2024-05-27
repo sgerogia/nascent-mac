@@ -114,7 +114,7 @@ function __rebase()
         BRANCH=`current_git_branch`
     fi
 
-    echo_and_call "git rebase -p -m origin/$BRANCH"
+    echo_and_call "git rebase --rebase-merges -m origin/$BRANCH"
 }
 
 function createfb()

@@ -10,11 +10,13 @@ brews=(
   buildkit
   bzip2
   cockroachdb/tap/cockroach
+  colima
   composer
   coreutils
   dfc
   exa
   findutils
+  ffmpeg
   "fontconfig --universal"
   fpp
   gh
@@ -30,6 +32,7 @@ brews=(
   gradle
   grep
   grpcurl
+  hashicorp/tap/terraform
   helm
   heroku
   htop
@@ -92,7 +95,6 @@ casks=(
   cleanmymac
   clocker
   discord
-  docker
   expressvpn
   ganache
   geekbench
@@ -105,6 +107,7 @@ casks=(
   keka
   launchrocket
   macvim
+  microsoft-remote-desktop
   monitorcontrol
   notion
   qlcolorcode
