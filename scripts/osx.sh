@@ -141,6 +141,8 @@ defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # Sleep after inactive in mins
 sudo systemsetup -setcomputersleep 30
+sudo pmset -b sleep 20                                                # Sleep after 20' when on battery
+sudo pmset -b displaysleep 15                                         # Sleep screen after 15' when on battery           
 
 # Enable snap-to-grid for icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
